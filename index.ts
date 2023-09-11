@@ -50,7 +50,7 @@ const fetchSummary = async (entry: string): Promise<FPLSummary> => {
 };
 
 const server = Bun.serve({
-  port: 4001,
+  port: Bun.env.PORT || 4001,
   async fetch(req) {
     const url = new URL(req.url);
     console.log(JSON.stringify(url));
