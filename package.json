@@ -2,11 +2,16 @@
   "name": "fpl",
   "module": "index.ts",
   "type": "module",
+  "scripts": {
+    "dev": "bun --hot run index.ts"
+  },
   "devDependencies": {
     "@flydotio/dockerfile": "latest",
     "bun-types": "latest"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
   }
 }
