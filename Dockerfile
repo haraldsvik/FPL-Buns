@@ -1,39 +1,34 @@
-# syntax = docker/dockerfile:1
+# Base image for build
+FROM oven/bun:1 as build
 
-# Adjust BUN_VERSION as desired
-ARG BUN_VERSION=1.0.1
-FROM oven/bun:${BUN_VERSION} as base
-
-LABEL fly_launch_runtime="Bun"
-
-# Bun app lives here
 WORKDIR /app
+ENV NODE_ENV=production
 
-# Set production environment
-ENV NODE_ENV="production"
+# Install dependencies
+COPY package.json bun.lockb ./
+RUN apt-get update -qq \
+    && apt-get install -y build-essential pkg-config python-is-python3 \
+    && bun install --ci
 
+# Build the application
+COPY index.ts tsconfig.json ./
+COPY src/ src/
+RUN bun build --target=bun ./index.ts --outfile="./server.js"
 
-# Throw-away build stage to reduce size of final image
-FROM base as build
+# Production Image
+FROM oven/bun:1.0.4-alpine 
 
-# Install packages needed to build node modules
-RUN apt-get update -qq && \
-    apt-get install -y build-essential pkg-config python-is-python3
-
-# Install node modules
-COPY --link bun.lockb package.json ./
-RUN bun install --ci
-
-# Copy application code
-COPY --link . .
-
-
-# Final stage for app image
-FROM base
-
-# Copy built application
-COPY --from=build /app /app
-
-# Start the server by default, this can be overwritten at runtime
+WORKDIR /app
 EXPOSE 4001
-CMD [ "bun", "index.ts" ]
+
+# Copy compiled server file from build stage
+COPY --from=build /app/server.js .
+
+# Create a non-root user and grant permissions
+RUN addgroup user \
+    && adduser -G user -s /bin/sh -D user \
+    && chown -R user:user /app
+
+# Use the non-root user to run the application
+USER user
+CMD [ "bun", "./server.js" ]
