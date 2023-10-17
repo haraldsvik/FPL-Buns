@@ -2,26 +2,15 @@ import { IFplProfile } from "../handlers/profile";
 
 type Cache = {
   data: { [key: string]: IFplProfile };
-  // lastUpdated: Date;
 };
 
 let cache: Cache = {
   data: {},
-  // lastUpdated: new Date(0)  // Initialize with a date far in the past
 };
 
-const MAX_CACHE_SIZE = 1000;
+const MAX_CACHE_SIZE = 10000;
 
 export const getFromMemoryCache = (key: string): IFplProfile | undefined => {
-  // const today = new Date().setHours(0, 0, 0, 0);
-  // const cacheDate = cache.lastUpdated.setHours(0, 0, 0, 0);
-
-  // // If the cache was last updated on a previous day, treat as invalid
-  // if (cacheDate < today) {
-  //   cache.data = {};
-  //   return undefined;
-  // }
-
   return cache.data[key];
 };
 
@@ -31,12 +20,18 @@ export const setToMemoryCache = (key: string, value: IFplProfile): void => {
   }
 
   cache.data[key] = value;
-  // if(!cache.lastUpdated) cache.lastUpdated = new Date();
 };
+
+export const getTopPlayers = (limit: number, offset: number): IFplProfile[] => {
+  const playersArray = Object.values(cache.data);
+
+  playersArray.sort((a, b) => b.summary_overall_points - a.summary_overall_points);
+
+  return playersArray.slice(offset, offset + limit);
+}
 
 export const invalidateCache = (): void => {
   cache = {
-    data: {},
-    // lastUpdated: new Date(0)
+    data: {}
   };
 }
