@@ -1,4 +1,4 @@
-import { router } from "./src/api/routes";
+import { errorResponse, router } from "./src/api/routes";
 
 const server = Bun.serve({
   port: Bun.env.PORT || 4001,
@@ -9,7 +9,7 @@ const server = Bun.serve({
   },
   async error(err) {
     console.error(err);
-    return new Response("Something went wrong :/", { status: 500 });
+    return errorResponse("Something went wrong :/", 500);
   }
 });
 

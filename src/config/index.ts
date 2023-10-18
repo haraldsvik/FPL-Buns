@@ -1,0 +1,1 @@
+export const fplUrl = "https://fantasy.premierleague.com/api";
