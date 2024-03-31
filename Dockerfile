@@ -16,7 +16,7 @@ COPY src/ src/
 RUN bun build --target=bun ./index.ts --outfile="./server.js"
 
 # Production Image
-FROM oven/bun:1.0.6-alpine 
+FROM oven/bun:1.0.36-alpine 
 
 WORKDIR /app
 EXPOSE 4001
