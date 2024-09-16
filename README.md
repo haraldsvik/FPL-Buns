@@ -47,11 +47,11 @@ curl https://fpl-buns.fly.dev/
 Fetch FPL profile
 
 ```sh
-curl http://localhost:4001/fpl/profile\?entry\=6478285 | jq
+curl http://localhost:4001/fpl/profile\?entry\=10242940 | jq
 ```
 
 ```sh
-curl https://fpl-buns.fly.dev/fpl/profile\?entry\=6478285 | jq
+curl https://fpl-buns.fly.dev/fpl/profile\?entry\=10242940 | jq
 ```
 
 Fetch FPL leaderboard
