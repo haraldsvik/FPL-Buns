@@ -64,7 +64,7 @@ curl http://localhost:4001/fpl/leaderboard | jq
 curl https://fpl-buns.fly.dev/fpl/leaderboard | jq
 ```
 
-Fetch FPL profile
+Fetch FPL invalidate cache
 
 ```sh
 curl http://localhost:4001/fpl/invalidate
